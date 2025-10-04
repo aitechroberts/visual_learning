@@ -3,6 +3,10 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+cmu16824hw1/
+data/
+runs/
+
 # C extensions
 *.so
 
