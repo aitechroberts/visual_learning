@@ -59,7 +59,7 @@ class HyperParameters:
 def create_dataset_and_dataloaders(subset=False):
     train_dataset = VOC2007DetectionTiny(
         DATASET_PATH, "train", image_size=IMAGE_SHAPE[0],
-        download=True# True (set to False after the first time)
+        download=False# True (set to False after the first time)
     )
     if subset:
         small_dataset = torch.utils.data.Subset(
@@ -168,9 +168,12 @@ def main(args):
             val_dataset,
             torch.linspace(0, len(val_dataset) - 1, steps=10).long()
         )
+        print(f"Using subset of {len(small_dataset)} images for test inference.")
         small_val_loader = torch.utils.data.DataLoader(
             small_dataset, batch_size=1, pin_memory=True, num_workers=NUM_WORKERS
         )
+        print(f"Validation set size: {len(small_val_loader)}")
+
         # Modify this depending on where you save your weights.
         weights_path = os.path.join(".", "fcos_detector.pt")
 
@@ -185,7 +188,7 @@ def main(args):
             detector,
             small_val_loader,
             val_dataset.idx_to_class,
-            score_thresh=0.7,
+            score_thresh=0.4,
             nms_thresh=0.5,
             device=DEVICE,
             dtype=torch.float32,

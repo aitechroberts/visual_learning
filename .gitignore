@@ -6,6 +6,10 @@ __pycache__/
 cmu16824hw1/
 data/
 runs/
+hw1-recognition/q1_q2_classification/checkpoint-model-epoch50.pth
+hw1-recognition/detection/fcos_detector.pt
+hw1-recognition/detection/detection_logs
+hw1-recognition/detection/mAP
 
 # C extensions
 *.so

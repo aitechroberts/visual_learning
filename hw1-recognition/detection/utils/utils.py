@@ -169,9 +169,21 @@ def detection_visualizer(img, idx_to_class, bbox=None, pred=None, points=None):
     # fmt:
     ax.margins(0)
     fig.canvas.draw()
-    image_from_plot = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
-    image_from_plot = image_from_plot.reshape(fig.canvas.get_width_height()[::-1] + (3,))
 
+    # Works for all matplotlib versions
+    if hasattr(fig.canvas, "buffer_rgba"):
+        buf = np.asarray(fig.canvas.buffer_rgba(), dtype=np.uint8)
+    else:
+        # Fallback for very old matplotlib
+        buf = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
+        w, h = fig.canvas.get_width_height()
+        buf = buf.reshape(h, w, 3)
+
+    # Drop alpha channel if present
+    if buf.shape[-1] == 4:
+        buf = buf[..., :3]
+
+    image_from_plot = buf
     return image_from_plot.transpose(2, 0, 1)
 
 

@@ -8,6 +8,11 @@ import torchvision
 import torch.nn as nn
 import random
 
+import torch.backends.cudnn as cudnn
+
+cudnn.benchmark = True
+cudnn.enabled = True
+
 
 class ResNet(nn.Module):
     def __init__(self, num_classes) -> None:
@@ -17,7 +22,8 @@ class ResNet(nn.Module):
         ##################################################################
         # TODO: Define a FC layer here to process the features
         ##################################################################
-        pass
+        in_features = self.resnet.fc.in_features
+        self.resnet.fc = nn.Linear(in_features, num_classes)
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -27,7 +33,7 @@ class ResNet(nn.Module):
         ##################################################################
         # TODO: Return raw outputs here
         ##################################################################
-        pass
+        return self.resnet(x)
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -45,16 +51,17 @@ if __name__ == "__main__":
     # You should experiment and choose the correct hyperparameters
     # You should get a map of around 50 in 50 epochs
     ##################################################################
-    # args = ARGS(
-    #     epochs=50,
-    #     inp_size=64,
-    #     use_cuda=True,
-    #     val_every=70
-    #     lr=# TODO,
-    #     batch_size=#TODO,
-    #     step_size=#TODO,
-    #     gamma=#TODO
-    # )
+    args = ARGS(
+        epochs=50,
+        inp_size=224,
+        use_cuda=True,
+        val_every=100,
+        lr=5e-5,           
+        batch_size=64,     
+        step_size=10,      
+        gamma=0.7,
+        save_at_end=True,          
+    )
     ##################################################################
     #                          END OF YOUR CODE                      #
     ##################################################################
