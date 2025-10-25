@@ -1,0 +1,12 @@
+pottedplant 99.79 37.03 130.25 53.16
+pottedplant 88.44 69.29 115.92 89.60
+pottedplant 37.67 61.53 72.91 99.75
+pottedplant 60.37 77.65 90.83 117.67
+pottedplant 84.26 85.42 138.02 156.50
+pottedplant 128.46 52.57 183.42 140.37
+pottedplant 175.05 90.20 224.00 188.76
+pottedplant 0.00 101.55 23.93 180.39
+pottedplant 0.00 69.89 3.62 107.52
+pottedplant 0.00 91.99 1.23 124.84
+pottedplant 1.83 59.73 14.97 89.60
+pottedplant 0.00 17.32 0.03 53.76
