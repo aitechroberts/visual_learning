@@ -33,7 +33,11 @@ class FlowModel(nn.Module):
         # First, prepare the time step t,
         # then pass x_t and the prepared t to the model.
         ##################################################################
-        pass
+        # t_idx shape should be [B], where B is the batch size, dtype long
+        # x_t shape is [B, C, H, W]
+        # t_idx is the time step indices corresponding to t
+        t_idx = self._prepare_t(t).to(x_t.device) # prepare time steps and pass to same device as x_t
+        return self.model(x_t, t_idx)
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -46,7 +50,9 @@ class FlowModel(nn.Module):
         ##################################################################
         # TODO 4.1: Implement one Euler step of the ODE solver
         ##################################################################
-        pass
+        velocity = self.forward(x, t)  # v_theta(x, t)
+        x_next = x + velocity * dt     # x(t + dt) = x(t) + v_theta(x(t), t) * dt
+        return x_next
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -66,15 +72,19 @@ class FlowModel(nn.Module):
         """
         solver = (solver or self.ode_solver).lower()
         steps = steps or self.sampling_timesteps
-
-        B, C, H, W = shape
-        x = torch.randn(shape, device=self.device)   # x(0) ~ N(0, I)
+        assert steps >= 2, "Number of sampling steps must be at least 2 for Euler integration"
 
         ##################################################################
         # TODO 4.1: Implement time grid and time step size,
         ##################################################################
-        ts = None
-        dt = None
+        B, C, H, W = shape # For my own understanding
+        x = torch.randn(shape, device=self.device)   # x(0) ~ N(0, I)
+
+        # Uniform time grid in [0,1]
+        ts = self._time_grid(steps)  # shape [steps]
+        # dt = ts[1] - ts[0]           # scalar time step size
+        dt = float(1.0 / (steps - 1))               # scalar step size
+
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################
@@ -108,8 +118,9 @@ class FlowModel(nn.Module):
         # TODO 4.1: Implement time grid and time step size,
         # similar to sample() function above.
         ##################################################################
-        ts = None
-        dt = None
+        # Uniform time grid on [0, 1]
+        ts = self._time_grid(steps)
+        dt = float(1.0 / (steps - 1))
         ##################################################################
         #                          END OF YOUR CODE                      #
         ##################################################################

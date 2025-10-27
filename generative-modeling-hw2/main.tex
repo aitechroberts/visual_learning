@@ -308,17 +308,17 @@ We will be training Generative Adversarial Networks (\href{(https://arxiv.org/pd
 \question Paste your plot of the samples and latent space interpolations from Vanilla GAN as well as the \textit{final} FID score you obtained. 
 \begin{solution}
 \\
-Vanilla GAN FID: 
+Vanilla GAN FID: 142.18 (Reached down to about 63 but then went back up, and I could not keep it from collapsing back up)
 \\
 \begin{figure}[H]
     \centering
     % TODO: put your plot here.
     \begin{subfigure}[b]{0.48\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{gan/data_gan/samples_30000.png}
         \caption{Vanilla GAN Samples}
     \end{subfigure}
     \begin{subfigure}[b]{0.48\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{gan/data_gan/interpolations_30000.png/latent_interpolations.png}
         \caption{Vanilla GAN Latent Space Interpolations}
     \end{subfigure}
 \end{figure}
@@ -326,16 +326,16 @@ Vanilla GAN FID:
 \question Paste your plot of the samples and latent space interpolations from LS-GAN as well as the \textit{final} FID score you obtained. 
 \begin{solution}
 \\
-LS-GAN FID: 
+LS-GAN FID: 72
 \\
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.48\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{gan/data_ls_gan/samples_30000.png}
         \caption{LS-GAN Samples}
     \end{subfigure}
     \begin{subfigure}[b]{0.48\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{gan/data_ls_gan/interpolations_30000.png/latent_interpolations.png}
         \caption{LS-GAN Latent Space Interpolations}
     \end{subfigure}
 \end{figure}
@@ -344,16 +344,16 @@ LS-GAN FID:
 \\
 \begin{solution}
 \\
-WGAN-GP FID:
+WGAN-GP FID: 45
 \\
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.48\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{gan/data_wgan_gp/samples_30000.png}
         \caption{WGAN-GP Samples}
     \end{subfigure}
     \begin{subfigure}[b]{0.48\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{gan/data_wgan_gp/interpolations_30000.png/latent_interpolations.png}
         \caption{WGAN-GP Latent Space Interpolations}
     \end{subfigure}
 \end{figure}  
@@ -388,27 +388,27 @@ We will be training Autoencoders and Variational Auto-Encoders (\href{https://ar
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.32\linewidth}
-    \includegraphics[width=\linewidth]{example-image}
+    \includegraphics[width=\linewidth]{vae/data/ae_latent16/recon_loss_vs_iterations.png}
     \caption{Loss (size 16)}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{vae/data/ae_latent128/recon_loss_vs_iterations.png}
         \caption{Loss: (size 128)}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{vae/data/ae_latent1024/recon_loss_vs_iterations.png}
         \caption{Loss: (size 1024)}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-    \includegraphics[width=\linewidth]{example-image}
+    \includegraphics[width=\linewidth]{vae/data/ae_latent16/epoch_20_recons.png}
     \caption{Reconstructions: (size 16)}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{vae/data/ae_latent128/epoch_20_recons.png}
         \caption{Reconstructions: (size 128)}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{vae/data/ae_latent1024/epoch_20_recons.png}
         \caption{Reconstructions: (size 1024)}
     \end{subfigure}
 \end{figure}
@@ -417,32 +417,32 @@ We will be training Autoencoders and Variational Auto-Encoders (\href{https://ar
 \question VAE: Choose the $\beta$ that results in the best sample quality, $\beta^*$. Report the $\beta^*$ you used in your experiments. In addition, paste the reconstruction, KL loss curve plots, and the sample images corresponding to the VAE trained using constant $\beta^*$ and the VAE trained using $\beta$ annealing scheme with $\beta^*$.
 \begin{solution}
 \\
-$\beta^*$ value:
+$\beta^*$ value: 0.8
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.32\linewidth}
-    \includegraphics[width=\linewidth]{example-image}
+    \includegraphics[width=\linewidth]{vae/data/vae_latent_beta_.8/recon_loss_vs_iterations.png}
     \caption{Recon. Loss: constant $\beta^*$}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-    \includegraphics[width=\linewidth]{example-image}
+    \includegraphics[width=\linewidth]{vae/data/vae_latent_beta_.8/kl_loss_vs_iterations.png}
     \caption{KL Loss: constant $\beta^*$}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-    \includegraphics[width=\linewidth]{example-image}
+    \includegraphics[width=\linewidth]{vae/data/vae_latent_beta_.8/epoch_20_samples.png}
     \caption{Samples: constant $\beta^*$}
     \end{subfigure}
     
     \begin{subfigure}[b]{0.32\linewidth}
-    \includegraphics[width=\linewidth]{example-image}
+    \includegraphics[width=\linewidth]{vae/data/vae_latent_beta_annealing/recon_loss_vs_iterations.png}
     \caption{Recon. Loss: $\beta$ annealed}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-    \includegraphics[width=\linewidth]{example-image}
+    \includegraphics[width=\linewidth]{vae/data/vae_latent_beta_annealing/kl_loss_vs_iterations.png}
     \caption{KL Loss: $\beta$ annealed}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-    \includegraphics[width=\linewidth]{example-image}
+    \includegraphics[width=\linewidth]{vae/data/vae_latent_beta_annealing/epoch_20_samples.png}
     \caption{Samples: $\beta$ annealed}
     \end{subfigure}
 \end{figure}
@@ -515,19 +515,19 @@ We will be running inference using a pre-trained flow matching model (\href{http
 \begin{solution}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{example-image}
+    \includegraphics[width=0.6\linewidth]{flow_matching/flow_euler/samples_euler.png}
     \caption{Flow Matching Euler ODE Samples}
 \end{figure}
 \end{solution}
 \question Paste in the FID score you obtained from running inference using Euler ODE sampling.
 \begin{solution}
 \begin{itemize}
-    \item Flow Matching FID:
+    \item Flow Matching FID: 30.598
 \end{itemize} 
 \end{solution}
 \question Compare the generated samples from your VAE and flow matching models. What do you observe? Does one generate better pictures than the other?
 \begin{solution}
-    \\
+    \\ The flow matching model seems to generate far sharper pictures than the VAE. However, given the resolution it is hard to tell the difference between the regular AE and the flow matching model though the flow matching model does seem a bit sharper though they both look similar. Interestingly, both are far better than the VAE with KL-Divergence and the Beta term, though it would be interesting to try to limit Beta toward the end following a warmup or attempt a cyclical annealing method.
 \end{solution}
 
 \end{questions}
@@ -542,7 +542,7 @@ We will be running inference using a pre-trained flow matching model (\href{http
     \item Did you receive any help whatsoever from anyone in solving this assignment?
     \begin{checkboxes}
      \choice Yes
-     \choice No
+     \CorrectChoice No
     \end{checkboxes}
     \begin{itemize}
         \item If you answered `Yes', give full details:
@@ -556,7 +556,7 @@ We will be running inference using a pre-trained flow matching model (\href{http
     \item Did you give any help whatsoever to anyone in solving this assignment?
     \begin{checkboxes}
      \choice Yes
-     \choice No\
+     \CorrectChoice No
     \end{checkboxes}
     \begin{itemize}
         \item If you answered `Yes', give full details:

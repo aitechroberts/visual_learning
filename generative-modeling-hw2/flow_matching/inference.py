@@ -17,7 +17,27 @@ def get_fid(gen, dataset_name, dataset_resolution, z_dimension, batch_size, num_
     # Hint: Refer to diffusion/inference.py
     # Note: The output must be in the range [0, 255]!
     ##################################################################
-    gen_fn = None
+    # gen is your FlowModel. Clean-FID will call this with batches of z
+    def gen_fn(z):
+        # z: (B, z_dim). We reshape to image-shaped Gaussian noise.
+        if isinstance(z, np.ndarray):
+            z = torch.from_numpy(z)
+        z = z.float().to(next(gen.parameters()).device)  # match FlowModel device
+        
+        B = z.shape[0]
+        C = 3
+        H = W = dataset_resolution
+        z_img = z.view(B, C, H, W)
+
+        # Integrate forward with your current solver/steps
+        x = gen.sample_given_z(
+            z_img, (B, C, H, W),
+            solver=gen.ode_solver, steps=gen.sampling_timesteps
+        )  # expected in [0,1]
+
+        # Convert to uint8 [0,255] and BHWC for Clean-FID
+        x = (x.clamp(0, 1) * 255.0).to(torch.float32)     # (B, C, H, W)
+        return x
 
     ##################################################################
     #                          END OF YOUR CODE                      #

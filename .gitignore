@@ -12,7 +12,14 @@ hw1-recognition/detection/detection_logs
 recognition-hw1/q1_q2_classification/checkpoint-model-epoch50.pth
 recognition-hw1/detection/fcos_detector.pt
 recognition-hw1/detection/detection_logs
-
+*.npz
+*.pt
+*.pth
+*.pkl
+*.ptl
+*.pthl
+*.pkl
+*.npz
 # C extensions
 *.so
 

@@ -18,7 +18,10 @@ def ae_loss(model, x):
     ##################################################################
     # TODO 2.2: Fill in MSE loss between x and its reconstruction.
     ##################################################################
-    loss = None
+    z = model.encoder(x)
+    x_recon = model.decoder(z)
+    loss = F.mse_loss(x_recon, x, reduction='none')
+    loss = loss.sum(dim=[1, 2, 3]).mean()  # Sum per sample, mean over batch
     ##################################################################
     #                          END OF YOUR CODE                      #
     ##################################################################
@@ -38,9 +41,25 @@ def vae_loss(model, x, beta = 1):
     # closed form, you can find the formula here:
     # (https://stats.stackexchange.com/questions/318748/deriving-the-kl-divergence-loss-for-vaes).
     ##################################################################
-    total_loss = None
-    recon_loss = None
-    kl_loss = None
+    # Encode -> reparameterize -> decode
+    mu, log_std = model.encoder(x)
+    # print("mu mean/std:", mu.mean().item(), mu.std().item(),
+    #   "logvar mean/std:", (2*log_std).mean().item(), (2*log_std).std().item())
+    log_var = 2.0 * log_std
+    std = torch.exp(0.5 * log_var)  # This simplifies to exp(log_std)
+    z = mu + std * torch.randn_like(std)
+    x_recon = model.decoder(z)
+    
+    # Reconstruction: sum per sample, then average across batch only
+    recon_loss = F.mse_loss(x_recon, x, reduction='none')  # (B, C, H, W)
+    recon_loss = recon_loss.sum(dim=[1, 2, 3]).mean()     # sum over C,H,W, mean over B
+    
+    # KL Divergence between N(mu, std^2) and N(0, 1)
+    kl_loss = 0.5 * torch.sum(
+        mu.pow(2) + torch.exp(log_var) - 1.0 - log_var, dim=1
+    ).mean()
+    
+    total_loss = recon_loss + beta * kl_loss
     ##################################################################
     #                          END OF YOUR CODE                      #
     ##################################################################
@@ -58,7 +77,16 @@ def linear_beta_scheduler(max_epochs=None, target_val = 1):
     # linearly from 0 at epoch 0 to target_val at epoch max_epochs.
     ##################################################################
     def _helper(epoch):
-        pass
+        if max_epochs is None or max_epochs <= 1:
+            return target_val
+        
+        # Linear interpolation from 0 to target_val
+        # At epoch 0: return 0
+        # At epoch (max_epochs-1): return target_val
+        beta = (epoch / (max_epochs - 1)) * target_val
+        
+        # Cap at target_val in case epoch >= max_epochs
+        return min(beta, target_val)
     ##################################################################
     #                          END OF YOUR CODE                      #
     ##################################################################
@@ -131,9 +159,9 @@ def main(log_dir, loss_mode = 'vae', beta_mode = 'constant', num_epochs = 20, ba
             print(epoch, train_metrics)
             print(epoch, val_metrics)
 
-            vis_recons(model, vis_x, 'data/'+log_dir+ '/epoch_'+str(epoch))
+            vis_recons(model, vis_x, 'data/'+log_dir+ '/epoch_'+str(epoch + 1))
             if loss_mode == 'vae':
-                vis_samples(model, 'data/'+log_dir+ '/epoch_'+str(epoch) )
+                vis_samples(model, 'data/'+log_dir+ '/epoch_'+str(epoch + 1) )
     for k,v in plot_metrics.items():
         plt.clf()
         save_plot(list(range(len(v))), v, "Epochs", k, f"{k} vs. Epochs", 'data/' + log_dir + f'/{k}_vs_iterations')
