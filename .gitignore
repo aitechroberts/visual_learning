@@ -20,6 +20,10 @@ recognition-hw1/detection/detection_logs
 *.pthl
 *.pkl
 *.npz
+vision-transformer-hw3/transformer_captioning/datasets/
+
+
+
 # C extensions
 *.so
 
