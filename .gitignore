@@ -21,7 +21,15 @@ recognition-hw1/detection/detection_logs
 *.pkl
 *.npz
 vision-transformer-hw3/transformer_captioning/datasets/
-
+vision-transformer-hw3/transformer_captioning/2head2layer/
+vision-transformer-hw3/transformer_captioning/4head6layerlow/
+vision-transformer-hw3/transformer_captioning/4head6layerhigh/
+vision-transformer-hw3/transformer_captioning/singlu_decoder/
+vision-transformer-hw3/transformer_captioning/swiglu_decoder/
+vision-transformer-hw3/transformer_captioning/singlu_lr17e4/
+vision-transformer-hw3/transformer_captioning/swiglu_lr17e4/
+vision-transformer-hw3/vit_classification/checkpoints
+vision-transformer-hw3/vit_classification/acc_loss
 
 
 # C extensions

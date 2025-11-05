@@ -300,22 +300,22 @@ We will be implementing the different pieces of a Transformer decoder (\href{htt
 \begin{questions}
 \question Paste training loss plots for each of the three hyper-param configs
 \\
-2-heads-2-layers-lr-1e-4: \textbf{TODO: fill in final train loss here.} \\
-4-heads-6-layers-lr-1e-4: \textbf{TODO: fill in final train loss here.} \\
-4-heads-6-layers-lr-1e-3: \textbf{TODO: fill in final train loss here.} 
+2-heads-2-layers-lr-1e-4: \textbf{loss: 0.778242} \\
+4-heads-6-layers-lr-1e-4: \textbf{loss: 0.258864} \\
+4-heads-6-layers-lr-1e-3: \textbf{loss: 0.049734} 
 \begin{figure}[H]
     \centering
     % TODO: put your plot here.
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{transformer_captioning/2head2layer/case1_loss_out.png}
         \caption{2-heads-2-layers-lre-4}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{transformer_captioning/4head6layerlow/case2_loss_out.png}
         \caption{4-heads-6-layers-lre-4}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{transformer_captioning/4head6layerhigh/case3_loss_out.png}
         \caption{4-heads-6-layers-lre-3}
     \end{subfigure}
     
@@ -325,15 +325,15 @@ We will be implementing the different pieces of a Transformer decoder (\href{htt
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{transformer_captioning/2head2layer/case1_train_2.png}
         \caption{Sample1: 2-heads-2-layers-lre-4}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{transformer_captioning/4head6layerlow/case2_train_1.png}
         \caption{Sample2:4-heads-6-layers-lre-4}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{transformer_captioning/4head6layerhigh/case3_train_4.png}
         \caption{Sample3:4-heads-6-layers-lre-3}
     \end{subfigure}
 \end{figure}
@@ -342,7 +342,7 @@ We will be implementing the different pieces of a Transformer decoder (\href{htt
 
 \begin{solution}
 \\ 
-% YOU ANSWER HERE
+Based on the above plots, we can see that the 4-heads-6-layers-lr-1e-3 configuration rapidly converges to a lower loss than the first two experiments, but fails to consistently converge well afterward. To fix this, focusing only on the hyperparameter part of the training, I would follow two main improvements: [1] Decrease the learning rate with an increased number of epochs and a learning rate scheduler. 1e-3 is clearly too aggressive as you can see in the oscillations. One could possibly add a warmup in this stage if the lr is low enough, but with so little data, I believe that is not required. [2] With the mentioned overfitting, I would attempt to alleviate overfitting with the following: I would include a weight decay in the optimizer as well as increased dropout and an increased batch size. These should sufficiently include regularization to improve training on this dataset though precise values would need experimentation to find the right fit.
 \end{solution}
 
 \item Experiment by replacing the activations in your transformer implementation with more modern activations such as SwiGLU. Paste the training loss plot below. Then describe the loss function used and performance changes observed.
@@ -350,14 +350,31 @@ We will be implementing the different pieces of a Transformer decoder (\href{htt
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{transformer_captioning/swiglu_decoder/case5_loss_out.png}
         \caption{Sample: SwiGLU training}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.32\linewidth}
+        \includegraphics[width=\linewidth]{transformer_captioning/singlu_decoder/case3_loss_out.png}
+        \caption{Sample: SinGLU training}
+    \end{subfigure}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.32\linewidth}
+        \includegraphics[width=\linewidth]{transformer_captioning/swiglu_lr17e4/case5_loss_out.png}
+        \caption{Sample: SwiGLU LR: 1.7e-4}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.32\linewidth}
+        \includegraphics[width=\linewidth]{transformer_captioning/singlu_lr17e4/case5_loss_out.png}
+        \caption{Sample: SinGLU LR: 1.7e-4}
     \end{subfigure}
 \end{figure}
 
 \begin{solution}
 \\ 
-% YOU ANSWER HERE
+I attempted both SwiGLU as requested and a supposed improvement over SwiGLU called SinGLU, a Sin-based GLU activation function proposed in this paper: “Improving Vision Transformers with Novel GLU-Type Nonlinearities”. I also did this across the first final learning rate above of 1e-3 and a smaller, but still slightly larger learning rate of 1.7e-4 to benefit from some slightly faster convergence than 1e-4. As you can see, the Gated Linear Unit activation functions prefer a lower learning rate to provide improvements over RELU. As for the loss, I did not make a change from Cross-Entropy loss as we did not change the expected output here, and the activation function change does not affect that. \\
+SwiGLU training loss: \textbf{loss: 0.096604}, SinGLU training loss: \textbf{loss: 0.092521} \\
+SwiGLU LR: 1.7e-4 training loss: \textbf{loss: 0.034074}, SinGLU LR: 1.7e-4 training loss: \textbf{loss: 0.052016}, (This one actually got down to a loss of 0.015 at epoch 90 but jumped back up at the end to lose to SwiGLU, so a scheduler and some finetuning would be interesting.)
 \end{solution}
 
 \end{questions}
@@ -378,11 +395,11 @@ We will use the transformer you implemented in the previous part to implement a 
 \begin{figure}[H]
     \centering
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{vit_classification/acc_out.png}
         \caption{Train/test accuracy}
     \end{subfigure}
     \begin{subfigure}[b]{0.32\linewidth}
-        \includegraphics[width=\linewidth]{example-image}
+        \includegraphics[width=\linewidth]{vit_classification/loss_out.png}
         \caption{Training loss}
     \end{subfigure}
 \end{figure}
@@ -390,11 +407,12 @@ We will use the transformer you implemented in the previous part to implement a 
 
 \begin{solution}
 \\ 
-Test Accuracy: \textbf{TODO: Fill in the accuracy here.}
+\textbf{SwiGLU Implementation}
+Test Accuracy: \textbf{0.683700}
 
-Train Accuracy: \textbf{TODO: Fill in the accuracy here.}
+Train Accuracy: \textbf{1.000000 [Achieved from epoch 97 onward]}
 
-Training Loss: \textbf{TODO: Fill in the loss here.}
+Training Loss: \textbf{loss: 0.025288}
 % YOU ANSWER HERE
 \end{solution}
 
